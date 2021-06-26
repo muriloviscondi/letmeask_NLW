@@ -37,19 +37,11 @@ export function Home() {
     const roomRef = await database.ref(`rooms/${roomCode}`).get();
 
     if (!roomRef.exists()) {
-      return Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Room does not exists',
-      });
+      return Swal.fire('Oops...', 'Room does not exists.', 'error');
     }
 
     if (roomRef.val().endedAt) {
-      return Swal.fire({
-        icon: 'info',
-        title: 'Oops...',
-        text: 'Room already closed',
-      });
+      return Swal.fire('Oops...', 'Room already closed.', 'info');
     }
 
     history.push(`/rooms/${roomCode}`);
