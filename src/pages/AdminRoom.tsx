@@ -12,6 +12,7 @@ import { RoomCode } from '../components/RoomCode';
 import { useRoom } from '../hooks/useRoom';
 
 import '../styles/room.scss';
+import Swal from 'sweetalert2';
 
 type RoomParams = {
   id: string;
@@ -33,9 +34,21 @@ export function AdminRoom() {
   }
 
   async function handleDeleteQuestion(questionId: string) {
-    if (window.confirm('Tem certeza que você deseja excluir esta pergunta?')) {
-      await database.ref(`rooms/${roomId}/questions/${questionId}`).remove();
-    }
+    Swal.fire({
+      title: 'Deletar pergunta',
+      text: 'Tem certeza que você deseja excluir esta pergunta?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#009900',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirmar',
+      cancelButtonText: 'Cancelar',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await database.ref(`rooms/${roomId}/questions/${questionId}`).remove();
+        Swal.fire('Excluída!', 'Pergunta excluída com sucesso.', 'success');
+      }
+    });
   }
 
   return (

@@ -3,6 +3,8 @@ import { useHistory } from 'react-router-dom';
 
 import { database } from '../services/firebase';
 
+import Swal from 'sweetalert2';
+
 import illustrationImg from '../assets/images/illustration.svg';
 import logoImg from '../assets/images/logo.svg';
 import googleIconImg from '../assets/images/google-icon.svg';
@@ -35,13 +37,19 @@ export function Home() {
     const roomRef = await database.ref(`rooms/${roomCode}`).get();
 
     if (!roomRef.exists()) {
-      alert('Room does not exists');
-      return;
+      return Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Room does not exists',
+      });
     }
 
     if (roomRef.val().endedAt) {
-      alert('Room already closed');
-      return;
+      return Swal.fire({
+        icon: 'info',
+        title: 'Oops...',
+        text: 'Room already closed',
+      });
     }
 
     history.push(`/rooms/${roomCode}`);
